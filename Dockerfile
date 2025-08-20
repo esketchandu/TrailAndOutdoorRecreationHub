@@ -1,26 +1,15 @@
-FROM python:3.9.18-alpine3.18
+FROM python:3.9-slim-bullseye
 
-# Install build dependencies
-RUN apk add --no-cache \
-    build-base \
-    postgresql-dev \
+# Install dependencies
+RUN apt-get update && apt-get install -y \
     gcc \
-    python3-dev \
-    musl-dev \
-    # Spatial libraries for PostGIS/Shapely
-    geos \
-    geos-dev \
-    proj \
-    proj-dev \
-    gdal \
-    gdal-dev \
-    # Additional dependencies for numpy/shapely
-    openblas-dev \
-    lapack-dev \
-    gfortran \
-    # Required for some Python packages
-    libffi-dev \
-    openssl-dev
+    g++ \
+    libpq-dev \
+    gdal-bin \
+    libgdal-dev \
+    libgeos-dev \
+    libproj-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 ARG FLASK_APP
 ARG FLASK_ENV
@@ -32,23 +21,22 @@ WORKDIR /var/www
 
 COPY requirements.txt .
 
-# Installing numpy first to avoid import issues
-RUN pip install --no-cache-dir numpy
-
-# Install the rest of the requirements
 RUN pip install --no-cache-dir -r requirements.txt
-RUN pip install --no-cache-dir psycopg2
 
 COPY . .
 
-# Setting Flask environment variables for the build commands
+# Create startup script
+RUN echo '#!/bin/bash' > /var/www/startup.sh && \
+    echo 'flask db upgrade' >> /var/www/startup.sh && \
+    echo 'flask seed all' >> /var/www/startup.sh && \
+    echo 'exec gunicorn app:app' >> /var/www/startup.sh && \
+    chmod +x /var/www/startup.sh
+
+# Set environment variables
 ENV FLASK_APP=${FLASK_APP}
 ENV FLASK_ENV=${FLASK_ENV}
 ENV DATABASE_URL=${DATABASE_URL}
 ENV SCHEMA=${SCHEMA}
 ENV SECRET_KEY=${SECRET_KEY}
 
-RUN flask db upgrade
-RUN flask seed all
-
-CMD gunicorn app:app
+CMD ["/var/www/startup.sh"]

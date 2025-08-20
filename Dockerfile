@@ -21,6 +21,9 @@ WORKDIR /var/www
 
 COPY requirements.txt .
 
+# Install numpy < 2.0 first to avoid conflicts
+RUN pip install --no-cache-dir "numpy<2.0"
+
 RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .

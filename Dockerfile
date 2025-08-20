@@ -4,6 +4,16 @@ RUN apk add build-base
 
 RUN apk add postgresql-dev gcc python3-dev musl-dev
 
+# Install PostGIS and its dependencies
+RUN apk add --no-cache \
+    geos \
+    geos-dev \
+    proj \
+    proj-dev \
+    gdal \
+    gdal-dev \
+    postgis
+
 ARG FLASK_APP
 ARG FLASK_ENV
 ARG DATABASE_URL

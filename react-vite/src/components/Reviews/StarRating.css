@@ -1,0 +1,39 @@
+.star-rating {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.star {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+.star:hover:not(:disabled) {
+  transform: scale(1.1);
+}
+
+.star.filled {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+.star:disabled {
+  cursor: default;
+}
+
+/* Remove focus outline but maintain accessibility */
+.star:focus {
+  outline: 2px solid #3498db;
+  outline-offset: 2px;
+}
+
+/* For read-only ratings, make them smaller */
+.star-rating:has(.star:disabled) .star {
+  font-size: 1.2rem;
+}

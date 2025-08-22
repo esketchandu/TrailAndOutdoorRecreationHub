@@ -1,0 +1,107 @@
+.trail-card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.trail-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.trail-card-image {
+  height: 200px;
+  overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+.trail-card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.trail-card-content {
+  padding: 1rem;
+}
+
+.trail-card h3 {
+  margin: 0 0 0.5rem 0;
+}
+
+.trail-stats {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.trail-stats span {
+  padding: 0.25rem 0.5rem;
+  background-color: #f0f0f0;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+.difficulty {
+  font-weight: bold;
+}
+
+.difficulty.easy {
+  background-color: #4caf50;
+  color: white;
+}
+
+.difficulty.moderate {
+  background-color: #ff9800;
+  color: white;
+}
+
+.difficulty.hard {
+  background-color: #f44336;
+  color: white;
+}
+
+.trail-rating {
+  margin-bottom: 0.5rem;
+}
+
+.trail-region {
+  color: #666;
+  margin: 0;
+}
+
+.trail-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  gap: 1rem;
+}
+
+.trail-card-footer .rating {
+  color: #f39c12;
+  font-weight: 500;
+}
+
+.trail-card-footer .region {
+  color: #7f8c8d;
+  text-align: right;
+  flex-shrink: 0; /* This Prevents region from shrinking */
+}
+
+.trail-card-stats {
+  display: flex;
+  align-items: center;
+  margin: 0.5rem 0;
+  gap: 0.75rem; /* Space between items */
+  flex-wrap: wrap; /* Allow wrapping on small cards */
+}
+
+.trail-card-stats span {
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}

@@ -28,9 +28,26 @@ function LoginFormModal() {
     }
   };
 
+  const handleDemoLogin = async (e) => {
+    e.preventDefault();
+    setEmail("demo@aa.io");
+    setPassword("password");
+
+    const serverResponse = await dispatch(
+      thunkLogin({
+        email: "demo@aa.io",
+        password: "password",
+      })
+    );
+
+    if (!serverResponse) {
+      closeModal();
+    }
+  };
+
   return (
-    <>
-      <h1>Log In</h1>
+    <div className="login-modal">
+      <h1>Welcome Back!</h1>
       <form onSubmit={handleSubmit}>
         <label>
           Email
@@ -38,23 +55,50 @@ function LoginFormModal() {
             type="text"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            placeholder="Enter your email"
             required
           />
         </label>
         {errors.email && <p>{errors.email}</p>}
+
         <label>
           Password
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
+            placeholder="Enter your password"
             required
           />
         </label>
         {errors.password && <p>{errors.password}</p>}
+
         <button type="submit">Log In</button>
+
+        <div style={{ textAlign: 'center', margin: '1rem 0', color: '#7f8c8d' }}>
+          OR
+        </div>
+
+        <button
+          type="button"
+          onClick={handleDemoLogin}
+          style={{
+            backgroundColor: '#27ae60',
+            color: 'white',
+            border: 'none',
+            padding: '0.875rem',
+            borderRadius: '8px',
+            fontSize: '1rem',
+            fontWeight: '600',
+            cursor: 'pointer',
+          }}
+          onMouseEnter={(e) => e.target.style.backgroundColor = '#229954'}
+          onMouseLeave={(e) => e.target.style.backgroundColor = '#27ae60'}
+        >
+          Demo User Login
+        </button>
       </form>
-    </>
+    </div>
   );
 }
 

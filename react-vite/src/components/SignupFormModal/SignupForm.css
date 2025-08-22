@@ -1,0 +1,96 @@
+.signup-modal h1 {
+  color: #2c3e50;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.signup-modal > p {
+  color: #e74c3c;
+  text-align: center;
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background-color: #fee;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.signup-modal form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0 1rem;
+}
+
+.signup-modal label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: #2c3e50;
+  font-weight: 500;
+  font-size: 0.9rem;
+}
+
+.signup-modal input {
+  padding: 0.75rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  font-weight: normal;
+}
+
+.signup-modal input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+.signup-modal p {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0 0;
+  font-weight: normal;
+}
+
+.signup-modal button[type="submit"] {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.875rem;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.signup-modal button[type="submit"]:hover {
+  background-color: #2980b9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.signup-modal button[type="submit"]:active {
+  transform: translateY(0);
+}
+
+/* Password strength indicator (optional enhancement) */
+.password-strength {
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.password-strength.weak {
+  color: #e74c3c;
+}
+
+.password-strength.medium {
+  color: #f39c12;
+}
+
+.password-strength.strong {
+  color: #27ae60;
+}

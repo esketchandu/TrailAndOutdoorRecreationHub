@@ -63,6 +63,7 @@ def get_trail_by_id(id):
 def create_trail():
     data = request.get_json()
 
+
     # Validate required fields
     errors = {}
     if not data.get('name'):
@@ -71,41 +72,65 @@ def create_trail():
         errors['difficulty'] = 'Difficulty is required'
     elif data['difficulty'] not in ['easy', 'moderate', 'hard', 'expert']:
         errors['difficulty'] = 'Difficulty must be one of: easy, moderate, hard, expert'
+
+    # Convert and validate length_km
+    length_km = None
     if not data.get('length_km'):
         errors['length_km'] = 'Trail length is required'
-    elif data['length_km'] <= 0:
-        errors['length_km'] = 'Trail length must be a positive number'
-    if not data.get('geometry'):
-        errors['geometry'] = 'Trail geometry is required'
+    else:
+        try:
+            length_km = float(data.get('length_km'))
+            if length_km <= 0:
+                errors['length_km'] = 'Trail length must be a positive number'
+        except (ValueError, TypeError):
+            errors['length_km'] = 'Trail length must be a valid number'
+
+    # Convert and validate elevation_gain_m (optional field)
+    elevation_gain_m = None
+    if data.get('elevation_gain_m'):
+        try:
+            elevation_gain_m = float(data.get('elevation_gain_m'))
+            if elevation_gain_m < 0:
+                errors['elevation_gain_m'] = 'Elevation gain cannot be negative'
+        except (ValueError, TypeError):
+            errors['elevation_gain_m'] = 'Elevation gain must be a valid number'
 
     if errors:
         return {'message': 'Validation error', 'errors': errors}, 400
 
     try:
-        # This is to convert GeoJSON to geometry
-        geojson = data['geometry']
-        if geojson['type'] != 'LineString':
-            return {'message': 'Geometry must be a LineString'}, 400
-
-        # This is to create LineString from coordinates
-        line = LineString(geojson['coordinates'])
-        geometry = from_shape(line, srid=4326)
+        # Handle geometry if provided, otherwise create a default line
+        geometry = None
+        if data.get('geometry'):  # Check if geometry exists first
+            geojson = data['geometry']
+            if geojson['type'] != 'LineString':
+                return {'message': 'Geometry must be a LineString'}, 400
+            # This is to create LineString from coordinates
+            line = LineString(geojson['coordinates'])
+            geometry = from_shape(line, srid=4326)
+        else:
+            # Create a default line (just two points)
+            # This is a temporary solution until we implement map functionality
+            default_line = LineString([(0, 0), (0.001, 0.001)])
+            geometry = from_shape(default_line, srid=4326)
 
         # Then create trail
         trail = Trail(
             name=data['name'],
             description=data.get('description', ''),
             difficulty=data['difficulty'],
-            length_km=data['length_km'],
-            elevation_gain_m=data.get('elevation_gain_m'),
-            geometry=geometry,
+            length_km=length_km,  # Already converted to float
+            elevation_gain_m=elevation_gain_m,  # Already converted to float or None
+            geometry=geometry,  # Now always has a value
             region=data.get('region', ''),
             parking_info=data.get('parking_info', ''),
             created_by=current_user.id
         )
 
+
         db.session.add(trail)
         db.session.commit()
+
 
         return trail.to_dict(), 201
 
